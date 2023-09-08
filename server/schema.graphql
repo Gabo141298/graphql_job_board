@@ -1,0 +1,65 @@
+# Tip: leave top level fields (fields in Query) nullable
+type Query {
+  jobs(limit: Int, offset: Int): JobSubList
+  job(id: ID!): Job
+  company(id: ID!): Company
+}
+
+type Mutation {
+  createJob(input: CreateJobInput!): Job
+  deleteJob(input: DeleteJobInput!): Job
+  updateJob(input: UpdateJobInput!): Job
+}
+
+"""
+Represents companies that post job ads.
+"""
+type Company {
+  id: ID!
+  name: String!
+  description: String
+  jobs: [Job!]
+}
+
+"""
+Represents users that post jobs from a company.
+"""
+type User {
+  id: ID!
+  companyId: Company
+  email: String!
+  password: String
+}
+
+"""
+Represents job ad posted to our board.
+"""
+type Job {
+  # This is a regular comment, not for documentation.
+  id: ID!
+  title: String!
+  description: String
+  """__Date__ when the job was published in ISO-8601 format. E.g `2023-09-05`"""
+  date: String!
+  company: Company!
+}
+
+type JobSubList {
+  items: [Job!]!
+  totalCount: Int!
+}
+
+input CreateJobInput {
+  title: String!
+  description: String
+}
+
+input DeleteJobInput {
+  id: ID!
+}
+
+input UpdateJobInput {
+  id: ID!
+  title: String!
+  description: String
+}
